@@ -1,0 +1,41 @@
+<!-- Модальное окно -->
+<div class="modal fade" id="addEmployeeModal" tabindex="-1" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addEmployeeModalLabel">Add Employee</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="add_employee.php" method="POST">
+                    <div class="form-group">
+                        <label for="employeeName">Name</label>
+                        <input type="text" class="form-control" id="employeeName" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="employeeEmail">Email</label>
+                        <input type="email" class="form-control" id="employeeEmail" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="employeeComments">Comments</label>
+                        <textarea class="form-control" id="employeeComments" name="comments"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="employeeDepartment">Department</label>
+                        <select class="form-control" id="employeeDepartment" name="department_id" required>
+                            <!-- Пример заполнения данными -->
+                            <option value="1">HR</option>
+                            <option value="2">Engineering</option>
+                            <option value="3">Sales</option>
+                            <!-- Вам нужно динамически заполнить этот список из базы данных -->
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Employee</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<?php

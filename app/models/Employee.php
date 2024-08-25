@@ -72,7 +72,10 @@ class Employee {
     }
     // Метод для получения всех сотрудников
     public function all() {
-        $query = "SELECT * FROM " . $this->table_name;
+        $query = "
+            SELECT employees.id, employees.name, employees.email, employees.comments, employees.department_id, departments.name as department_name 
+            FROM " . $this->table_name . " 
+            LEFT JOIN departments ON employees.department_id = departments.id";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
 

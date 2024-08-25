@@ -5,6 +5,7 @@ $routes = [
         'add-employee' => 'EmployeeController@add',
         'employee/{id}' => 'EmployeeController@show',
         'departments' => 'DepartmentController@index',
+        'department/{id}' => 'DepartmentController@show',
     ],
     'POST' => [
         'employee' => 'EmployeeController@store',

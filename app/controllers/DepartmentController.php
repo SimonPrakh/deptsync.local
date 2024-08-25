@@ -4,14 +4,9 @@ require_once 'app/models/Department.php';
 class DepartmentController {
     public function index() {
         $department = new Department();
-        $Departments = $department->all();
-        var_dump($Departments);
-        // Передаем данные в представление (view)
-        // Например, render('employees/index', ['employees' => $employees]);
-        // Для простоты, здесь просто выведем данные:
-        foreach ($Departments as $employee) {
-            echo "ID: " . $employee['id'] . ", Name: " . $employee['name'] . ", Email: " . $employee['email'] . "<br>";
-        }
+        $departments = $department->all();
+        header('Content-Type: application/json');
+        echo json_encode($departments);
     }
 
     // Метод для отображения одного сотрудника по ID
@@ -21,10 +16,10 @@ class DepartmentController {
 
         if ($Department) {
             // Передаем данные в представление (view)
+        return $Department;
             // Например, render('employees/show', ['employee' => $employee]);
-            echo "Name: " . $Department['name'] . "<br>";
         } else {
-            echo "Employee not found.";
+            echo "Department not found.";
         }
     }
 
@@ -33,13 +28,13 @@ class DepartmentController {
         $jsonData = file_get_contents('php://input');
         $data = json_decode($jsonData, true);
         // Создаем экземпляр модели Employee
-        $DepartmentModel = new Employee();
+        $DepartmentModel = new Department();
 
         // Передаем данные в метод store модели
         if ($DepartmentModel->store($data)) {
-            echo "Employee created successfully.";
+            echo "Department created successfully.";
         } else {
-            echo "Failed to create employee.";
+            echo "Failed to create department.";
         }
     }
 
@@ -60,7 +55,7 @@ class DepartmentController {
         }
 
         // Создаем экземпляр модели Employee
-        $DepartmentModel = new Employee();
+        $DepartmentModel = new Department();
 
         // Передаем данные в модель
         $DepartmentModel->update($id, $data);
@@ -69,7 +64,7 @@ class DepartmentController {
     // Метод для удаления сотрудника
     public function delete($id) {
 
-        $DepartmentModel = new Employee();
+        $DepartmentModel = new Department();
         $deleted = $DepartmentModel->delete($id);
 
         if ($deleted) {

@@ -13,25 +13,24 @@ class Department {
         $this->conn = $database->getConnection();
     }
     public function store($data) {
-        // Проверка на уникальность email
-        $query = "SELECT COUNT(*) as count FROM " . $this->table_name . " WHERE email = :email";
+        // Проверка на уникальность имени
+        $query = "SELECT COUNT(*) as count FROM " . $this->table_name . " WHERE name = :name";
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':email', $data['email'], PDO::PARAM_STR);
-
+        $stmt->bindParam(':name', $data['name'], PDO::PARAM_STR);
         $stmt->execute();
 
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($result['count'] > 0) {
-            // Если такой email уже существует, выводим сообщение об ошибке
-            echo "Error: Email already in use by another user.";
+            // Если такое имя уже существует, выводим сообщение об ошибке
+            echo "Error: Name already in use by another user.";
             return false;
         }
 
         // Формируем запрос для вставки новой записи
         $query = "INSERT INTO " . $this->table_name . "
               SET
-                name = :name,";
+                name = :name"; // Удалил лишнюю запятую
 
         $stmt = $this->conn->prepare($query);
 
@@ -48,6 +47,7 @@ class Department {
 
         return false;
     }
+
     // Метод для получения всех сотрудников
     public function all() {
         $query = "SELECT * FROM " . $this->table_name;
@@ -61,13 +61,12 @@ class Department {
     public function find($id) {
 
         $query = "SELECT * FROM " . $this->table_name . " WHERE id = ? LIMIT 0,1";
-        echo $query;
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(1, $id, PDO::PARAM_INT);
         $stmt->execute();
 
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
+        var_dump($row);
         if ($row) {
             return $row; // Возвращаем данные в виде массива
         }
@@ -80,43 +79,37 @@ class Department {
 
         // Проверяем наличие записи с таким ID
         $query = "SELECT COUNT(*) as count FROM " . $this->table_name . " WHERE id = :id LIMIT 1";
-
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-
         $stmt->execute();
 
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($result['count'] > 0) {
-            // Если запись найдена, продолжаем выполнение кода
-            echo "Record found. Proceeding with further code execution.";
-        } else {
+        if ($result['count'] == 0) {
+            // Если запись не найдена, выводим сообщение об ошибке
             echo "Error: User not found.";
             return false;
         }
 
-        // Проверка на уникальность email (если email изменился)
-        $query = "SELECT COUNT(*) as count FROM " . $this->table_name . " WHERE email = :email AND id != :id";
-
+        // Проверка на уникальность имени (если имя изменилось)
+        $query = "SELECT COUNT(*) as count FROM " . $this->table_name . " WHERE name = :name AND id != :id";
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':email', $data['email'], PDO::PARAM_STR);
+        $stmt->bindParam(':name', $data['name'], PDO::PARAM_STR);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-
         $stmt->execute();
 
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($result['count'] > 0) {
-            // Если такой email уже существует для другой записи, выводим сообщение об ошибке
-            echo "Error: Email already in use by another user.";
+            // Если такое имя уже существует для другой записи, выводим сообщение об ошибке
+            echo "Error: Name already in use by another user.";
             return false;
         }
 
         // Формируем запрос для обновления записи
         $query = "UPDATE " . $this->table_name . "
               SET
-                name = :name,
+                name = :name
               WHERE
                 id = :id";
 
@@ -124,10 +117,12 @@ class Department {
 
         // Очистка данных
         $name = htmlspecialchars(strip_tags($data['name']));
+
         // Привязка параметров
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':name', $name, PDO::PARAM_STR);
 
+        // Выполнение запроса на обновление
         if ($stmt->execute()) {
             return true;
         }
@@ -139,7 +134,7 @@ class Department {
 
     // Метод для удаления сотрудника
     public function delete($id) {
-        $query = "DELETE FROM employees WHERE id = :id"; // Используем именованный параметр :id
+        $query = "DELETE FROM ".$this->table_name." WHERE id = :id"; // Используем именованный параметр :id
 
         $stmt = $this->conn->prepare($query);
 
@@ -156,5 +151,4 @@ class Department {
 
         return false;
     }
-    // Методы для работы с базой данных (CRUD)
 }

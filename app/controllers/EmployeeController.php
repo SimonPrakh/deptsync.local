@@ -7,14 +7,9 @@ class EmployeeController {
     public function index() {
         $employeeModel = new Employee();
         $employees = $employeeModel->all();
-        var_dump($employees);
-        // Передаем данные в представление (view)
-        // Например, render('employees/index', ['employees' => $employees]);
-        // Для простоты, здесь просто выведем данные:
-        foreach ($employees as $employee) {
-            echo "ID: " . $employee['id'] . ", Name: " . $employee['name'] . ", Email: " . $employee['email'] . "<br>";
-        }
+        include __DIR__ . '/../views/view.php';
     }
+
 
     // Метод для отображения одного сотрудника по ID
     public function show($id) {
