@@ -30,7 +30,7 @@
                 <td><?= $employee['comments']; ?></td>
                 <td><?= $employee['department_name']; ?></td>
                 <td>
-                    <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addEmployeeModal" data-id="<?= $employee['id']; ?>">Edit</a>
+                    <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editEmployeeModal" data-id="<?= $employee['id']; ?>">Edit</a>
 
                     <a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmDeleteModal" data-id="<?= $employee['id']; ?>">Delete</a>
                 </td>
@@ -43,6 +43,7 @@
 </div>
 <?php include 'app/views/temlates/Employees/addEmp.php';
 include 'app/views/temlates/Employees/delEmp.php';
+include 'app/views/temlates/Employees/editEmp.php';
 ?>
 
 <!-- Подключаем Bootstrap JS и зависимости -->

@@ -1,17 +1,20 @@
 
 $(document).ready(function() {
-    // Отправляем AJAX-запрос для получения списка департаментов
-    $.ajax({
-        url: 'http://deptsync.local/departments', // Замените на правильный путь к методу index вашего контроллера
-        type: 'GET',
-        dataType: 'json', // Ожидаем, что сервер вернет JSON
-        success: function(data) {
-            if (data.length > 0) {
+    $('#editEmployeeModal').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget);
+        var employeeId = button.data('id');
+
+        // Сначала загружаем список департаментов
+        $.ajax({
+            url: 'http://deptsync.local/departments',
+            type: 'GET',
+            dataType: 'json',
+            success: function(departments) {
                 // Очищаем текущий список
                 $('#employeeDepartment').empty();
-
+                console.log(departments)
                 // Заполняем выпадающий список полученными данными
-                $.each(data, function(index, department) {
+                $.each(departments, function(index, department) {
                     $('#employeeDepartment').append(
                         $('<option>', {
                             value: department.id,
@@ -19,17 +22,37 @@ $(document).ready(function() {
                         })
                     );
                 });
-            } else {
-                $('#employeeDepartment').append('<option>No departments found</option>');
+
+                // После загрузки департаментов загружаем данные сотрудника
+                loadEmployeeData(employeeId);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching departments: ', error);
+                $('#employeeDepartment').append('<option>Error loading departments</option>');
             }
-        },
-        error: function(xhr, status, error) {
-            console.error('Error fetching departments: ', error);
-            $('#employeeDepartment').append('<option>Error loading departments</option>');
+        });
+
+        function loadEmployeeData(employeeId) {
+            // Загрузка данных сотрудника через AJAX
+            $.ajax({
+                url: 'employee/' + employeeId,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    // Заполнение формы данными
+                    $('#employeeId').val(data.id);
+                    $('#employeeName').val(data.name);
+                    $('#employeeEmail').val(data.email);
+                    $('#employeeComments').val(data.comments);
+                    $('#employeeDepartment').val(data.department_id);
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error:', error);
+                }
+            });
         }
     });
 });
-
 
 
 $(document).ready(function(){

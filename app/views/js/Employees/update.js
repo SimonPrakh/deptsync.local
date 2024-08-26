@@ -1,6 +1,6 @@
 
     $(document).ready(function() {
-        $('#addEmployeeModal').on('show.bs.modal', function(event) {
+        $('#editEmployeeModal').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget);
             var employeeId = button.data('id');
 
@@ -15,6 +15,7 @@
                     $('#employeeEmail').val(data.email);
                     $('#employeeComments').val(data.comments);
                     $('#employeeDepartment').val(data.department_id);
+
                 },
                 error: function(xhr, status, error) {
                     console.log('Error:', error);
@@ -42,4 +43,3 @@
             }
         });
     });
-});
